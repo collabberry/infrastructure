@@ -1,0 +1,54 @@
+# Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfplan
+.terraform/
+*.tfvars
+
+# Pulumi files
+Pulumi.*.yaml
+.pulumi/
+
+# AWS CLI files
+.aws/
+
+# CDK files
+cdk.out/
+
+# Node.js dependencies
+node_modules/
+
+# Python virtual environment
+venv/
+*.pyc
+__pycache__/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Secrets and sensitive information
+*.pem
+*.key
+*.env
+
+# GitHub Actions
+.github/workflows/*.yml
+
+# Miscellaneous
+*.zip
+*.tar.gz
