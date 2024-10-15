@@ -1,0 +1,39 @@
+version: '3.6'
+x-common: &common
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "500m"
+      max-file: "5"
+      compress: "true"
+  networks:
+    - cb-be-network
+    - cb-fe-network
+  restart:
+    unless-stopped
+
+services:
+  proxyservice:
+    <<: *common
+    container_name: proxyservice
+    image: collabberry/proxyservice:latest
+    environment:
+      BACKEND_ADDR: backend
+      FRONTEND_ADDR: frontend-app
+      SSL_CERT_PATH: /etc/nginx/ssl/star.collabberry.xyz.crt
+      SSL_CERT_KEY_PATH: /etc/nginx/ssl/star.collabberry.xyz.key
+      BACKEND_URL: api.collabberry.xyz
+      FRONTEND_URL: app.collabberry.xyz
+    volumes:
+      - ./ssl/:/etc/nginx/ssl/
+    ports:
+      - 443:443
+      - 80:80
+
+networks:
+  cb-be-network:
+    name: deployment_collabberry-backend
+    external: true
+  db-fe-network:
+    name: deployment_collabberry-frontend
+    external: true
