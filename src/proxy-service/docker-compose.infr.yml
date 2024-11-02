@@ -1,4 +1,3 @@
-version: '3.6'
 x-common: &common
   logging:
     driver: "json-file"
@@ -7,23 +6,25 @@ x-common: &common
       max-file: "5"
       compress: "true"
   networks:
-    - cb-be-network
     - cb-fe-network
+    - cb-be-network
   restart:
     unless-stopped
 
 services:
-  proxyservice:
+  proxy-service:
     <<: *common
-    container_name: proxyservice
-    image: collabberry/proxyservice:latest
+    container_name: proxy-service
+    platform: linux/amd64
+    build: .
+    image: collabberry/proxy-service:latest
     environment:
-      BACKEND_ADDR: backend
-      FRONTEND_ADDR: frontend-app
       SSL_CERT_PATH: /etc/nginx/ssl/star.collabberry.xyz.crt
       SSL_CERT_KEY_PATH: /etc/nginx/ssl/star.collabberry.xyz.key
-      BACKEND_URL: api.collabberry.xyz
-      FRONTEND_URL: app.collabberry.xyz
+      FRONTEND_DOMAIN: app.collabberry.xyz
+      BACKEND_DOMAIN: api.collabberry.xyz
+      FRONTEND_CONTAINER_ADDR: http://frontend-app:4100
+      BACKEND_CONTAINER_ADDR: http://backend:3000
     volumes:
       - ./ssl/:/etc/nginx/ssl/
     ports:
@@ -31,9 +32,9 @@ services:
       - 80:80
 
 networks:
+  cb-fe-network:
+    name: deployment_collabberry-frontend
+    external: true
   cb-be-network:
     name: deployment_collabberry-backend
-    external: true
-  db-fe-network:
-    name: deployment_collabberry-frontend
     external: true
